@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Секретное сообщение</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        #login, #message { display: none; }
+        #timer { font-weight: bold; color: red; }
+    </style>
+</head>
+<body>
+    <div id="login">
+        <h2>Введите логин и пароль</h2>
+        <input type="text" id="username" placeholder="Логин"><br><br>
+        <input type="password" id="password" placeholder="Пароль"><br><br>
+        <button onclick="checkLogin()">Войти</button>
+        <p id="error" style="color: red;"></p>
+    </div>
+    
+    <div id="message">
+        <h2>Секретное сообщение</h2>
+        <p id="secret">Это ваш секретный текст.</p>
+        <p>Сайт деактивируется через: <span id="timer"></span></p>
+    </div>
+
+    <script>
+        const correctUsername = "admin";
+        const correctPassword = "1234";
+        let countdown;
+        
+        function checkLogin() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            
+            if (user === correctUsername && pass === correctPassword) {
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('message').style.display = 'block';
+                startCountdown(24 * 60 * 60); // 24 часа
+            } else {
+                document.getElementById('error').textContent = 'Неверный логин или пароль';
+            }
+        }
+        
+        function startCountdown(seconds) {
+            let timeLeft = seconds;
+            countdown = setInterval(() => {
+                let hours = Math.floor(timeLeft / 3600);
+                let minutes = Math.floor((timeLeft % 3600) / 60);
+                let seconds = timeLeft % 60;
+                document.getElementById('timer').textContent = `${hours}ч ${minutes}м ${seconds}с`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    document.getElementById('message').innerHTML = '<h2>Сайт деактивирован</h2>';
+                }
+                timeLeft--;
+            }, 1000);
+        }
+        
+        document.getElementById('login').style.display = 'block';
+    </script>
+</body>
+</html>
